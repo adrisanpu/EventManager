@@ -1,0 +1,82 @@
+import streamlit as st
+import requests
+
+# App configuration
+API_BASE_URL = "https://<your-api-gateway-url>"  # Replace with your API Gateway endpoint
+COGNITO_SIGN_IN_URL = "https://<your-cognito-domain>.auth.<region>.amazoncognito.com/login?client_id=<app-client-id>&response_type=token&scope=openid&redirect_uri=http://localhost:8501"
+
+# --- Authentication Section ---
+st.sidebar.image("static/logo.png", width=150)
+st.sidebar.title("Event Manager")
+st.sidebar.info("Please sign in via Cognito to continue.")
+
+if "access_token" not in st.session_state:
+    st.session_state.access_token = None
+
+# Sign-in Button
+if not st.session_state.access_token:
+    st.sidebar.markdown(f"[Sign In]( {COGNITO_SIGN_IN_URL} )")
+    st.stop()
+
+# --- Event Management Section ---
+st.title("Event Management System")
+st.subheader("Manage your events seamlessly!")
+
+# Layout with 2 columns
+col1, col2 = st.columns([2, 1])
+
+# Function to fetch all events
+def fetch_events():
+    headers = {"Authorization": f"Bearer {st.session_state.access_token}"}
+    response = requests.get(f"{API_BASE_URL}/events", headers=headers)
+    return response.json() if response.status_code == 200 else []
+
+# Function to create/update/delete events
+def post_event(data, method="POST"):
+    headers = {
+        "Authorization": f"Bearer {st.session_state.access_token}",
+        "Content-Type": "application/json"
+    }
+    return requests.request(method, f"{API_BASE_URL}/events", headers=headers, json=data)
+
+# --- Display Events ---
+with col1:
+    st.header("Events")
+    events = fetch_events()
+
+    if not events:
+        st.write("No events available.")
+    else:
+        selected_event = None
+        for event in events:
+            with st.expander(f"{event['name']} - {event['date']}"):
+                st.write(f"**Location**: {event['location']}")
+                st.write(f"**ID**: {event['id']}")
+                if st.button("Edit", key=f"edit_{event['id']}"):
+                    selected_event = event
+                if st.button("Delete", key=f"delete_{event['id']}"):
+                    post_event({"id": event["id"]}, method="DELETE")
+                    st.experimental_rerun()
+
+# --- Event Form (Create/Edit) ---
+with col2:
+    st.header("Event Form")
+    form_data = {"id": "", "name": "", "date": "", "location": ""}
+
+    if selected_event:
+        form_data = selected_event
+
+    with st.form("event_form", clear_on_submit=True):
+        form_data["id"] = st.text_input("Event ID", value=form_data["id"])
+        form_data["name"] = st.text_input("Event Name", value=form_data["name"])
+        form_data["date"] = st.date_input("Event Date", value=form_data["date"])
+        form_data["location"] = st.text_input("Event Location", value=form_data["location"])
+        
+        submitted = st.form_submit_button("Submit Event")
+        if submitted:
+            if form_data["id"]:
+                post_event(form_data, method="PUT")
+            else:
+                post_event(form_data, method="POST")
+            st.success("Event submitted successfully!")
+            st.experimental_rerun()
