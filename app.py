@@ -9,9 +9,9 @@ COGNITO_SIGN_IN_URL = "https://us-east-1fr69d5yr4.auth.us-east-1.amazoncognito.c
 
 # Function to extract token from URL fragment
 def extract_token_from_url():
-    query_params = st.experimental_get_query_params()
+    query_params = st.query_params
     if "access_token" in query_params:
-        return query_params["access_token"][0]
+        return query_params["access_token"]
     return None
 
 # Function to clean the URL fragment and reload
