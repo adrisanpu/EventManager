@@ -1,22 +1,42 @@
 import streamlit as st
 import requests
+import re
+from urllib.parse import urlparse, parse_qs
 
 # App configuration
 API_BASE_URL = "https://d74rfmvj5f.execute-api.us-east-1.amazonaws.com"
 COGNITO_SIGN_IN_URL = "https://us-east-1fr69d5yr4.auth.us-east-1.amazoncognito.com/login?client_id=794g205l7hst4la4k1tf97hunq&response_type=token&scope=openid&redirect_uri=https://eventmanager-prtylabs.streamlit.app/"
+
+# Function to extract token from URL fragment
+def extract_token_from_url():
+    query_params = st.experimental_get_query_params()
+    if "access_token" in query_params:
+        return query_params["access_token"][0]
+    return None
+
+# Function to clean the URL fragment and reload
+def reload_without_token():
+    st.experimental_set_query_params()
 
 # --- Authentication Section ---
 st.sidebar.image("static/event_manager_logo.png", width=150)
 st.sidebar.title("Event Manager")
 st.sidebar.info("Please sign in via Cognito to continue.")
 
+# Check for token in session state
 if "access_token" not in st.session_state:
     st.session_state.access_token = None
 
-# Sign-in Button
+# Check URL for access token and save to session state
 if not st.session_state.access_token:
-    st.sidebar.markdown(f"[Sign In]( {COGNITO_SIGN_IN_URL} )")
-    st.stop()
+    access_token = extract_token_from_url()
+    if access_token:
+        st.session_state.access_token = access_token
+        reload_without_token()
+        st.experimental_rerun()
+    else:
+        st.sidebar.markdown(f"[Sign In]( {COGNITO_SIGN_IN_URL} )")
+        st.stop()
 
 # --- Event Management Section ---
 st.title("Event Management System")
