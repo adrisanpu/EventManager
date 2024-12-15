@@ -2,11 +2,11 @@ import streamlit as st
 import requests
 
 # App configuration
-API_BASE_URL = "https://<your-api-gateway-url>"  # Replace with your API Gateway endpoint
-COGNITO_SIGN_IN_URL = "https://<your-cognito-domain>.auth.<region>.amazoncognito.com/login?client_id=<app-client-id>&response_type=token&scope=openid&redirect_uri=http://localhost:8501"
+API_BASE_URL = "https://d74rfmvj5f.execute-api.us-east-1.amazonaws.com"
+COGNITO_SIGN_IN_URL = "https://us-east-1fr69d5yr4.auth.us-east-1.amazoncognito.com/login?client_id=794g205l7hst4la4k1tf97hunq&response_type=token&scope=openid&redirect_uri=http://localhost:8501"
 
 # --- Authentication Section ---
-st.sidebar.image("static/logo.png", width=150)
+st.sidebar.image("static/event_manager_logo.png", width=150)
 st.sidebar.title("Event Manager")
 st.sidebar.info("Please sign in via Cognito to continue.")
 
