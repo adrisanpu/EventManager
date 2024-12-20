@@ -63,7 +63,6 @@ try:
             tokens = exchange_code_for_tokens(auth_code)
             st.session_state.access_token = tokens.get("access_token")
             st.session_state.id_token = tokens.get("id_token")
-            print("Access Token:", st.session_state.access_token)
             clear_url()
             st.rerun()
         else:
