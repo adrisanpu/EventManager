@@ -21,7 +21,7 @@ The Event Manager Client App is a Streamlit-based web application that allows us
 - **API Management**: AWS API Gateway
 
 ## Project Structure
-
+```
 project/
 │
 ├── app.py             # Main entry point for the Streamlit application
@@ -32,7 +32,7 @@ project/
 ├── utils.py           # Utility functions
 ├── static/            # Static assets such as the logo
 └── README.md          # Documentation
-
+```
 
 ## Setup and Installation
 
