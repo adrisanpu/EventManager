@@ -1,8 +1,9 @@
 import streamlit as st
+import datetime as dt
 from auth import exchange_code_for_tokens, clear_url
 from api import fetch_events, manage_event, delete_event
 from ui_components import render_sidebar, render_flashcards
-from utils import get_max_id
+from utils import get_max_id, initialize_session_state
 from config import COGNITO_DOMAIN, CLIENT_ID, REDIRECT_URI
 
 # Authentication
@@ -28,14 +29,13 @@ except Exception as e:
 
 # Fetch Events
 events = fetch_events()
+initialize_session_state()
 
 # Sidebar
-if 'selected_event' not in st.session_state:
-    st.session_state.selected_event = "None"
 
 selected_event = st.session_state.selected_event
 
-if selected_event != "None":
+if selected_event != None:
     event_data = next(event for event in events if event["id"] == selected_event['id'])
     form_data = {"id": event_data["id"], "name": event_data["name"], "date": event_data["date"], "location": event_data["location"]}
 else:
@@ -45,8 +45,9 @@ render_sidebar("static/event_manager_logo.png", form_data)
 
 # Main UI
 selected_nav = st.selectbox("Filter Events", ["All Events", "Upcoming Events", "Past Events"])
+today = dt.datetime.now()
 filtered_events = [event for event in events if selected_nav == "All Events" or (
-    selected_nav == "Upcoming Events" and event["date"] > "2024-01-01") or (
-    selected_nav == "Past Events" and event["date"] <= "2024-01-01"
+    selected_nav == "Upcoming Events" and dt.datetime.strptime(event["date"],"%Y-%m-%d") > today) or (
+    selected_nav == "Past Events" and dt.datetime.strptime(event["date"],"%Y-%m-%d") <= today
 )]
 render_flashcards(filtered_events)

@@ -1,5 +1,5 @@
 import streamlit as st
-from api import manage_event, delete_event
+from api import manage_event, delete_event, fetch_events
 from utils import get_max_id, clear_session_state
 
 def render_sidebar(logo_path, form_data):
@@ -30,36 +30,39 @@ def render_sidebar(logo_path, form_data):
                     "date": str(event_date),
                     "location": str(event_location)
                 }
-                method = "PUT" if st.session_state.selected_event != "None" else "POST"
+                method = "PUT" if st.session_state.selected_event != None else "POST"
                 print(method)
                 response = manage_event(event_data, method=method)
-                print(response.json())
-                st.success("Event submitted successfully!")
-                clear_session_state()
-                st.rerun()
+                if response:
+                    st.success("Event submitted successfully!")
+                    clear_session_state()
+                    st.rerun()
 
 def render_flashcards(events):
     cols = st.columns(3)
     for idx, event in enumerate(events):
         with cols[idx % 3]:
             st.markdown(
-                f"""<div style='border: 1px solid #ddd; padding: 10px; border-radius: 8px; height: 200px; width: 200px; display: flex; flex-direction: column; justify-content: space-between;'>
-                <h3>{event['name']}</h3>
-                <p><b>Location:</b> {event['location']}</p>
-                <p><b>Date:</b> {event['date']}</p>
-                </div>""",
+                f"""
+                <div style='border: 1px solid #ddd; padding: 10px; border-radius: 8px; height: 200px; width: 200px;'>
+                    <h3>{event['name']}</h3>
+                    <p><b>Location:</b> {event['location']}</p>
+                    <p><b>Date:</b> {event['date']}</p>
+                </div>
+                """,
                 unsafe_allow_html=True
             )
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("Modify", key=f"select_{event['id']}"):
-                    st.session_state.selected_event = event
-                    st.rerun()
-            with col2:
-                if st.button("Delete", key=f"delete_{event['id']}"):
-                    print(event['id'])
-                    response = delete_event(event['id'])
-                    print(response.json())
-                    st.success("Event deleted successfully!")
-                    clear_session_state()
-                    st.rerun()
+            render_buttons(event)
+
+def render_buttons(event):
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Modify", key=f"select_{event['id']}"):
+            st.session_state.selected_event = event
+            st.rerun()
+    with col2:
+        if st.button("Delete", key=f"delete_{event['id']}"):
+            response = delete_event(event['id'])
+            if response:
+                st.success("Event deleted successfully!")
+                st.rerun()
