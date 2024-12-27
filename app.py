@@ -1,10 +1,10 @@
 import streamlit as st
 import datetime as dt
-from auth import exchange_code_for_tokens, clear_url
-from api import fetch_events, manage_event, delete_event
-from ui_components import render_sidebar, render_flashcards
-from utils import get_max_id, initialize_session_state
-from config import COGNITO_DOMAIN, CLIENT_ID, REDIRECT_URI
+from src.auth import exchange_code_for_tokens, clear_url
+from src.api import fetch_events, manage_event, delete_event
+from src.ui_components import render_sidebar, render_flashcards
+from src.utils import get_max_id, initialize_session_state
+from src.config import COGNITO_DOMAIN, CLIENT_ID, REDIRECT_URI
 
 # Authentication
 try:
