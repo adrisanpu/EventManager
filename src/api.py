@@ -1,6 +1,6 @@
 import requests
 import streamlit as st
-from config import API_BASE_URL
+from .config import API_BASE_URL
 
 def fetch_events():
     headers = {"Authorization": f"Bearer {st.session_state.access_token}"}

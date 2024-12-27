@@ -6,6 +6,8 @@ from src.ui_components import render_sidebar, render_flashcards
 from src.utils import get_max_id, initialize_session_state
 from src.config import COGNITO_DOMAIN, CLIENT_ID, REDIRECT_URI
 
+print(st.secrets)
+
 # Authentication
 try:
     auth_code = st.query_params.get("code")

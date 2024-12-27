@@ -4,8 +4,8 @@ import uuid
 import tempfile
 import os
 from PIL import Image
-from config import S3_BUCKET_NAME, S3_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY
-from api import fetch_events
+from .config import S3_BUCKET_NAME, S3_REGION, AWS_ACCESS_KEY, AWS_SECRET_KEY
+from .api import fetch_events
 
 def initialize_session_state():
     if "selected_event" not in st.session_state:

@@ -1,6 +1,6 @@
 import streamlit as st
-from api import manage_event, delete_event, fetch_events
-from utils import get_max_id, clear_session_state, upload_thumbnail
+from .api import manage_event, delete_event, fetch_events
+from .utils import clear_session_state, upload_thumbnail
 
 def render_sidebar(logo_path, form_data):
     with st.sidebar:
