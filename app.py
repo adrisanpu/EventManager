@@ -6,12 +6,14 @@ from src.ui_components import render_sidebar, render_flashcards
 from src.utils import get_max_id, initialize_session_state
 from src.config import COGNITO_DOMAIN, CLIENT_ID, REDIRECT_URI
 
-print(st.secrets)
+if 'access_token' not in st.session_state:
+    st.session_state['access_token'] = None
+if 'id_token' not in st.session_state:
+    st.session_state['id_token'] = None
 
 # Authentication
 try:
     auth_code = st.query_params.get("code")
-
     if "access_token" not in st.session_state or not st.session_state.access_token:
         if auth_code:
             tokens = exchange_code_for_tokens(auth_code)
