@@ -1,11 +1,27 @@
 import streamlit as st
 import datetime as dt
+import logging
 from src.auth import exchange_code_for_tokens, clear_url
-from src.api import fetch_events, manage_event, delete_event
+from src.api import fetch_events
 from src.ui_components import render_sidebar, render_flashcards
 from src.utils import get_max_id, initialize_session_state
 from src.config import COGNITO_DOMAIN, CLIENT_ID, REDIRECT_URI
 
+# Set up basic logging configuration
+logging.basicConfig(
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    level=logging.INFO,  # Adjust to DEBUG for more verbosity
+    handlers=[
+        logging.StreamHandler()  # Sends logs to the console (visible in Streamlit Cloud logs)
+    ]
+)
+
+# Example usage
+logging.info("Streamlit app started.")
+logging.warning("This is a warning log.")
+logging.error("This is an error log.")
+
+# Initialize session state
 if 'access_token' not in st.session_state:
     st.session_state['access_token'] = None
 if 'id_token' not in st.session_state:
