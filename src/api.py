@@ -1,12 +1,14 @@
 import requests
 import streamlit as st
 from .config import API_BASE_URL
+import logging
 
 def fetch_events():
     headers = {"Authorization": f"Bearer {st.session_state.access_token}"}
     try:
         response = requests.get(API_BASE_URL, headers=headers)
         response.raise_for_status()
+        logging.info(f"Events fetched successfully: {response.json()}")
         return response.json()
     except requests.exceptions.RequestException as e:
         st.error(f"Failed to fetch events: {e}")
@@ -21,6 +23,7 @@ def manage_event(data, method="POST"):
         response = requests.request(method, API_BASE_URL, json=data, headers=headers)
         print(response.json())
         response.raise_for_status()
+        logging.info(f"Event managed successfully: {response.json()}")
         return response.json()
     except requests.exceptions.RequestException as e:
         st.error(f"Failed to manage event: {e}")
@@ -34,6 +37,7 @@ def delete_event(event_id):
     try:
         response = requests.delete(f"{API_BASE_URL}/?id={event_id}", headers=headers)
         response.raise_for_status()
+        logging.info(f"Event deleted successfully: {response.json()}")
         return response.json()
     except requests.exceptions.RequestException as e:
         st.error(f"Failed to delete event: {e}")

@@ -1,6 +1,6 @@
 import streamlit as st
 from .api import manage_event, delete_event, fetch_events
-from .utils import clear_session_state, upload_thumbnail
+from .utils import clear_session_state, upload_thumbnail, get_max_id
 
 def render_sidebar(logo_path, form_data):
     with st.sidebar:
@@ -21,15 +21,20 @@ def render_sidebar(logo_path, form_data):
                 st.rerun()
         with col2:
             if st.button("Submit"):
-                event_id = st.session_state.selected_event['id']
+                if st.session_state.selected_event != None:
+                    event_id = st.session_state.selected_event['id']
+                    thumbnail_url = st.session_state.selected_event['thumbnail_url']
+                else:
+                    event_id = get_max_id(fetch_events()) + 1
+                    thumbnail_url = "99a7b895-6966-4717-a063-c0ae646f1c31"
+                    
                 event_name = st.session_state.event_name_form
                 event_date = st.session_state.event_date_form
                 event_location = st.session_state.event_location_form
-                thumbnail_url = st.session_state.selected_event['thumbnail_url']
 
                 if uploaded_file:
                     thumbnail_url = upload_thumbnail(uploaded_file)
-
+                
                 event_data = {
                     "id": int(event_id),
                     "name": str(event_name),

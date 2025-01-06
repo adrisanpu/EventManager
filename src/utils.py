@@ -21,10 +21,15 @@ def clear_session_state():
     st.session_state.form_data = {"id": get_max_id(events), "name": "", "date": None, "location": ""}
     st.session_state.selected_event = None
 
-def crop_image(file, output_width=200, output_height=120):
-    # Open the image using Pillow
-    with Image.open(file) as img:
-        # Get the dimensions of the original image
+def process_image(image_path, output_width=200, output_height=120):
+    """
+    Process the image by scaling and then cropping it to the desired dimensions.
+    """
+    with Image.open(image_path) as img:
+        # Scale the image while maintaining the aspect ratio
+        img.thumbnail((output_width, output_height), Image.LANCZOS)
+
+        # Get the dimensions of the scaled image
         width, height = img.size
 
         # Calculate the cropping box to crop from the center
@@ -61,7 +66,7 @@ def upload_thumbnail(file):
     # Generate a unique filename
     file_name = uuid.uuid4()
     s3_key = f"{file_name}.png"
-    temp_file_path = crop_image(file)
+    temp_file_path = process_image(file)
 
     print(f"Uploading {temp_file_path} to {s3_key}")
 
