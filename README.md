@@ -57,14 +57,22 @@ project/
     pip install -r requirements.txt
     ```
 
-3. Configure AWS services in `config.py`:
+3. Configure AWS services in a folder `.streamlit/secrets.toml`:
     ```python
-    COGNITO_DOMAIN = "<Your Cognito Domain>"
-    CLIENT_ID = "<Your Client ID>"
-    CLIENT_SECRET = "<Your Client Secret>"
-    REDIRECT_URI = "http://localhost:8501/"
-    TOKEN_ENDPOINT = f"{COGNITO_DOMAIN}/oauth2/token"
-    API_BASE_URL = "<Your API Gateway Base URL>"
+    [default]
+    COGNITO_DOMAIN = [COMPLETE]
+    CLIENT_ID = [COMPLETE]
+    CLIENT_SECRET = [COMPLETE]
+    REDIRECT_URI = [COMPLETE]
+    API_BASE_URL = [COMPLETE]
+    
+    [s3]
+    S3_BUCKET_NAME = [COMPLETE]
+    S3_REGION = [COMPLETE]
+    
+    [aws]
+    AWS_ACCESS_KEY = [COMPLETE]
+    AWS_SECRET_KEY = [COMPLETE]
     ```
 
 4. Run the application:
@@ -133,9 +141,6 @@ The app communicates with AWS API Gateway to perform CRUD operations:
     ```
 5. Open a pull request.
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
 
