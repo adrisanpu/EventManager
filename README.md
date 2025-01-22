@@ -58,7 +58,7 @@ project/
     ```
 
 3. Configure AWS services in a folder `.streamlit/secrets.toml`:
-    ```python
+    ```toml
     [default]
     COGNITO_DOMAIN = [COMPLETE]
     CLIENT_ID = [COMPLETE]
