@@ -16,9 +16,11 @@ The Event Manager Client App is a Streamlit-based web application that allows us
 
 - **Frontend**: Streamlit
 - **Backend**: AWS Lambda
-- **Database**: AWS DynamoDB
+- **Database**: AWS DynamoDB and AWS S3
 - **Authentication**: AWS Cognito
 - **API Management**: AWS API Gateway
+  
+![eventapi_aws drawio](https://github.com/user-attachments/assets/28baadc8-428e-4aad-ba19-82d3cb30904b)
 
 ## Project Structure
 ```
