@@ -4,6 +4,8 @@
 
 The Event Manager Client App is a Streamlit-based web application that allows users to manage events using a dynamic, user-friendly interface. The app is integrated with AWS services such as Cognito for authentication and API Gateway with Lambda functions for backend operations. Users can create, update, delete, and view events through a clean and intuitive interface.
 
+![image](https://github.com/user-attachments/assets/9568a295-8460-4327-8a36-e797de27fc68)
+
 ## Features
 
 - **User Authentication**: Secure login via AWS Cognito.
